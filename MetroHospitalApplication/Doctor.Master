@@ -1,0 +1,191 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Doctor.master.cs" Inherits="MetroHospitalApplication.Doctor" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Doctor Panel - Metro Hospital</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f6fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #8e44ad, #f39c12);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding-top: 30px;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .sidebar h5 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .menu-links a, .menu-links .dropdown-toggle {
+            display: block;
+            padding: 12px 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            margin: 5px 10px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-links a:hover, .menu-links .dropdown-toggle:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Dropdown */
+        .dropdown-menu {
+            display: none;
+            flex-direction: column;
+            background: rgba(255,255,255,0.1);
+            margin-left: 10px;
+            border-radius: 8px;
+        }
+
+        .dropdown-menu a {
+            padding: 10px 25px;
+            margin: 0;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 1.8rem;
+            color: #fff;
+            z-index: 1100;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 250px;
+            padding: 25px;
+            transition: margin-left 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                left: -260px;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+            .content {
+                margin-left: 0;
+            }
+            .dropdown-menu {
+                margin-left: 0;
+            }
+        }
+
+        /* Badge Style */
+        .badge-circle {
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form runat="server">
+        <!-- Sidebar Toggle -->
+        <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <h5>Doctor Panel</h5>
+            <div class="menu-links">
+                <a href="DoctorHome.aspx">🏠 Dashboard</a>
+                <a href="DoctorProfile.aspx">👤 My Profile</a>
+                <a href="DoctorSchedule.aspx">🕒 My Schedule</a>
+                <a href="DoctorAppointments.aspx">📅 Appointments
+                    <span id="notifCount" runat="server" class="badge-circle">0</span>
+                </a>
+                <a href="PatientRecords.aspx">🗂️ Patient Records</a>
+
+                <!-- Reports Dropdown -->
+                <div class="dropdown">
+                    <a class="dropdown-toggle" onclick="toggleReportsDropdown()">📊 Reports ▾</a>
+                    <div id="reportsDropdown" class="dropdown-menu">
+                        <a class="dropdown-item" href="PatientVisitReport.aspx">🧾 Patient Visit Report</a>
+                        <a class="dropdown-item" href="DoctorRevenueReport.aspx">💰 Revenue / Billing Report</a>
+                        <a class="dropdown-item" href="DoctorAppointmentHistoryReport.aspx">📅 Appointment History Report</a>
+                        <a class="dropdown-item" href="DoctorPerformanceReport.aspx">🏥 Doctor Performance Report</a>
+                        <a class="dropdown-item" href="PatientFeedbackReport.aspx">📝 Patient Feedback Report</a>
+                    </div>
+                </div>
+
+                <!-- Logout -->
+                <a href="Logout.aspx" onclick="return confirmLogout();">🚪 Logout</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server" />
+        </div>
+    </form>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function toggleReportsDropdown() {
+            var menu = document.getElementById('reportsDropdown');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function confirmLogout() {
+            return confirm('Are you sure you want to logout?');
+        }
+
+        // Close dropdown if click outside
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropdown-toggle')) {
+                var dropdowns = document.getElementsByClassName('dropdown-menu');
+                for (var i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

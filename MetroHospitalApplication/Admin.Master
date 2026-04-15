@@ -1,0 +1,302 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="MetroHospitalApplication.Admin" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Metro Hospital - Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f5f6fa; margin: 0; }
+
+        /* Sidebar */
+        .sidebar { 
+            height: 100vh; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 240px; 
+            background-color: #1f2a38; 
+            padding-top: 20px; 
+            overflow-y: auto;
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed { width: 80px; }
+
+        .sidebar h4 {
+            color: #ffffff;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .sidebar .nav-link { 
+            color: #cfd8dc; 
+            margin-bottom: 5px; 
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar .nav-link.active, 
+        .sidebar .nav-link:hover { 
+            background-color: #2c3e50; 
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .sidebar .dropdown-menu {
+            background-color: #2c3e50;
+            border: none;
+        }
+        .sidebar .dropdown-item {
+            color: #ecf0f1;
+        }
+        .sidebar .dropdown-item:hover {
+            background-color: #34495e;
+            color: #fff;
+        }
+
+        /* Content */
+        .content { 
+            margin-left: 240px; 
+            padding: 20px; 
+            min-height: 100vh; 
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar.collapsed + .content { margin-left: 80px; }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header .logout-btn { cursor: pointer; }
+
+        /* Quick Access Buttons */
+        .quick-access .btn { 
+            min-width: 180px; 
+            margin-right: 10px; 
+            margin-bottom: 10px; 
+        }
+
+        /* Cards */
+        .card { 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+        }
+
+        .chart-card { 
+            height: 300px; 
+        }
+
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <!-- Sidebar -->
+        <nav class="sidebar d-flex flex-column">
+            <h4 class="px-3 mb-4">Metro Hospital</h4>
+            <ul class="nav flex-column px-2">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="AdminHome.aspx">
+                        <i class="fa-solid fa-house me-2"></i> Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="Patients.aspx">
+                        <i class="fa-solid fa-user-injured me-2"></i> Patients
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="shift system.aspx">
+                        <i class="fa-solid fa-user-injured me-2"></i>Doctor's Shift
+                    </a>
+                </li>
+
+                 <li class="nav-item">
+                    <a class="nav-link" href="addPackage.aspx">
+                        <i class="fa-solid fa-user-injured me-2"></i> Add Package
+                    </a>
+                </li>
+
+
+                 <!-- Test -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="doctorsDropdownn" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-doctor me-2"></i> Test and TestAppointment
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="doctorsDropdownn">
+                        <li><a class="dropdown-item" href="Tests.aspx"><i class="fa-solid fa-list me-1"></i>Add New Test</a></li>
+                        <li><a class="dropdown-item" href="TestList.aspx"><i class="fa-solid fa-user-plus me-1"></i>Test Appointment List</a></li>
+                          </ul>
+                </li>
+                <!-- Doctors -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="doctorsDropdown" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-doctor me-2"></i> Doctors
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="doctorsDropdown">
+                        <li><a class="dropdown-item" href="DoctorList.aspx"><i class="fa-solid fa-list me-1"></i> Doctor List</a></li>
+                        <li><a class="dropdown-item" href="AddDoctor.aspx"><i class="fa-solid fa-user-plus me-1"></i> Add Doctor</a></li>
+                        <li><a class="dropdown-item" href="DoctorSchedule.aspx"><i class="fa-solid fa-calendar-check me-1"></i> Doctor Schedule</a></li>
+                    </ul>
+                </li>
+
+                <!-- Appointments -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="appointmentsDropdown" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-calendar-check me-2"></i> Appointments
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="appointmentsDropdown">
+                        <li><a class="dropdown-item" href="AppintmentListAdmin.aspx"><i class="fa-solid fa-list me-1"></i> All Appointments</a></li>
+                        <li><a class="dropdown-item" href="AppointmentSchedule.aspx"><i class="fa-solid fa-calendar-plus me-1"></i> Schedule Appointment</a></li>
+                        <li><a class="dropdown-item" href="PendingAppointments.aspx"><i class="fa-solid fa-hourglass-half me-1"></i> Pending Appointments</a></li>
+                    </ul>
+                </li>
+
+                <!-- Reports -->
+                <!-- Patient Reports Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="patientReportsDropdown" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-user-injured me-2"></i> Patient Reports
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="patientReportsDropdown">
+        <li><a class="dropdown-item" href="PatientReport.aspx"><i class="fa-solid fa-file-lines me-2"></i> Patient Report</a></li>
+        <li><a class="dropdown-item" href="PatientBillingReport.aspx"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Billing Report</a></li>
+    </ul>
+</li>
+
+<!-- Doctor Reports Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="doctorReportsDropdown" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-user-doctor me-2"></i> Doctor Reports
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="doctorReportsDropdown">
+        <li><a class="dropdown-item" href="DoctorReport.aspx"><i class="fa-solid fa-file-lines me-2"></i> Doctor Report</a></li>
+        <li><a class="dropdown-item" href="DoctorEarningsReport.aspx"><i class="fa-solid fa-money-bill-trend-up me-2"></i> Earnings Report</a></li>
+    </ul>
+</li>
+
+<!-- Appointment Reports Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="appointmentReportsDropdown" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-calendar-check me-2"></i> Appointment Reports
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="appointmentReportsDropdown">
+        <li><a class="dropdown-item" href="AppointmentReport.aspx"><i class="fa-solid fa-file-lines me-2"></i> Appointment Report</a></li>
+        <li><a class="dropdown-item" href="PendingPaymentsReport.aspx"><i class="fa-solid fa-hourglass-half me-2"></i> Pending Payments</a></li>
+        <li><a class="dropdown-item" href="CompletedPaymentsReport.aspx"><i class="fa-solid fa-check-circle me-2"></i> Completed Payments</a></li>
+    </ul>
+</li>
+
+<!-- Department / Specialization Reports Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="departmentReportsDropdown" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-building-columns me-2"></i> Department Reports
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="departmentReportsDropdown">
+        <li><a class="dropdown-item" href="DepartmentReport.aspx"><i class="fa-solid fa-file-lines me-2"></i> Department / Specialization Report</a></li>
+    </ul>
+</li>
+
+<!-- Admission / Discharge Reports Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="admissionReportsDropdown" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-hospital-user me-2"></i> Admission Reports
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="admissionReportsDropdown">
+        <li><a class="dropdown-item" href="AdmissionReport.aspx"><i class="fa-solid fa-file-lines me-2"></i> Admission Report</a></li>
+        <li><a class="dropdown-item" href="DischargeReport.aspx"><i class="fa-solid fa-file-export me-2"></i> Discharge Report</a></li>
+    </ul>
+</li>
+
+<!-- Finance Reports Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="financeReportsDropdown" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-money-bill-transfer me-2"></i> Finance Reports
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="financeReportsDropdown">
+        <li><a class="dropdown-item" href="RevenueReport.aspx"><i class="fa-solid fa-chart-line me-2"></i> Revenue Report</a></li>
+        <li><a class="dropdown-item" href="PendingPaymentsReport.aspx"><i class="fa-solid fa-hourglass-half me-2"></i> Pending Payments</a></li>
+        <li><a class="dropdown-item" href="CompletedPaymentsReport.aspx"><i class="fa-solid fa-check-circle me-2"></i> Completed Payments</a></li>
+        <li><a class="dropdown-item" href="PatientBillingReport.aspx"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Patient-wise Billing</a></li>
+        <li><a class="dropdown-item" href="DoctorEarningsReport.aspx"><i class="fa-solid fa-money-bill-trend-up me-2"></i> Doctor-wise Earnings</a></li>
+    </ul>
+</li>
+
+
+
+               <li class="nav-item">
+    <a class="nav-link" href="Messages.aspx">
+        <i class="fa-solid fa-envelope me-2"></i> Messages
+        <span id="lblUnreadCount" runat="server" class="badge bg-danger ms-2"></span>
+    </a>
+</li>
+<!-- Logout -->
+<li class="nav-item mt-auto">
+    <a class="nav-link text-danger" href="Logout.aspx" onclick="return confirm('Are you sure you want to logout?');">
+        <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+    </a>
+</li>
+
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="header">
+                <h3>Admin Dashboard</h3>
+                <span class="logout-btn text-danger" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                </span>
+            </div>
+
+            <!-- Quick Access Buttons -->
+            <div class="mb-4 quick-access">
+                <a class="btn btn-primary" href="Patients.aspx"><i class="fa-solid fa-user-plus me-2"></i> Add Patient</a>
+                <a class="btn btn-success" href="AddDoctor.aspx"><i class="fa-solid fa-user-doctor me-2"></i> Add Doctor</a>
+                    </div>
+
+            <!-- Page content -->
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+
+        </main>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            function confirmLogout() {
+                if (confirm("Are you sure you want to logout?")) {
+                    window.location.href = 'Logout.aspx';
+                }
+                return false;
+            }
+        </script>
+    </form>
+</body>
+</html>
